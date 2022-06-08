@@ -21,6 +21,22 @@
                   </tr>
               </table>
           <el-form :model="ruleForm"  :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" v-else>
+            <el-form-item label="头像：">
+              <el-upload
+                  ref="upload"
+                  class="avatar-uploader"
+                  action="/car/admin/adduser"
+                  accept="image/*"
+                  :show-file-list="false"
+                  :on-success="handleAvatarSuccess"
+                  :auto-upload="false"
+                  :data="param11"
+                  :on-change="change"
+                  list-type="picture">
+                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+            </el-form-item>
             <el-form-item label="姓名" prop="username">
               <el-input v-model="ruleForm.username"></el-input>
             </el-form-item>
@@ -36,22 +52,22 @@
             <el-form-item label="密码" prop="password">
               <el-input v-model="ruleForm.password"></el-input>
             </el-form-item>
-            <el-form-item
-                prop="email"
-                label="邮箱"
-                :rules="[
-      { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-      { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
-    ]"
-            >
-              <el-input v-model="ruleForm.email"></el-input>
-              <el-button @click="sendemail">发送邮箱验证码</el-button>
-            </el-form-item>
-            <el-form-item label="验证码" prop="password" v-if="isOK">
-              <el-input v-model="ruleForm.code"></el-input>
-            </el-form-item>
+<!--            <el-form-item-->
+<!--                prop="email"-->
+<!--                label="邮箱"-->
+<!--                :rules="[-->
+<!--      { required: true, message: '请输入邮箱地址', trigger: 'blur' },-->
+<!--      { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }-->
+<!--    ]"-->
+<!--            >-->
+<!--              <el-input v-model="ruleForm.email"></el-input>-->
+<!--              <el-button @click="sendemail">发送邮箱验证码</el-button>-->
+<!--            </el-form-item>-->
+<!--            <el-form-item label="验证码" prop="password" v-if="isOK">-->
+<!--              <el-input v-model="ruleForm.code"></el-input>-->
+<!--            </el-form-item>-->
             <el-form-item>
-              <el-button type="primary" @click="submitForm('ruleForm')">立即注册</el-button>
+              <el-button type="primary " @click="submitForm('ruleForm')">立即注册</el-button>
               <el-button @click="resetForm">去登入</el-button>
             </el-form-item>
           </el-form>
@@ -78,12 +94,13 @@ export default {
             password:'',
             isshow:true,
           isOK:false,
+          imageUrl:'',
+          param11:{},
           ruleForm: {
             username: '',
             gender: '男',
             account:'',
             password:'',
-            email:'',
             code:''
           },
           rules: {
@@ -109,44 +126,49 @@ export default {
         this.$refs.submit.disabled=true;
     },
     methods:{
-      submitForm(formName) {
-        if (this.ruleForm.code ==''){
+      handleAvatarSuccess(res){
+        if (res.msg == "添加成功"){
           this.$message({
-            message: '请先获取验证码！',
+            message: '注册成功！！',
+            type: 'success'
+          });
+        }else {
+          this.$message({
+            message: '注册失败！！',
             type: 'error'
           });
-          return;
         }
+      },
+      change(file){
+        this.imageUrl = file.url
+      },
+      submitForm(formName) {
+        // if (this.ruleForm.code ==''){
+        //   this.$message({
+        //     message: '请先获取验证码！',
+        //     type: 'error'
+        //   });
+        //   return;
+        // }
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            if (this.ruleForm.code != 556596){
-              this.$message({
-                message: '验证码不正确！',
-                type: 'error'
-              });
-            }else {
-              let parma = {
-                username: this.ruleForm.username,
-                gender: this.ruleForm.gender,
-                account:this.ruleForm.account,
-                password:this.ruleForm.password
-              }
-              this.$axios.post('/admin/adduser',{data:parma})
-                  .then(res=>{
-                    if (res.status === 200){
-                      this.$message({
-                        message: '注册成功！！',
-                        type: 'success'
-                      });
-                    }else {
-                      this.$message({
-                        message: '注册失败！！',
-                        type: 'error'
-                      });
-                    }
-                  })
-                  .catch(err=>console.log(err))
+            this.param11 = {
+              username: this.ruleForm.username,
+              gender: this.ruleForm.gender,
+              account:this.ruleForm.account,
+              password:this.ruleForm.password
             }
+            this.$nextTick(()=>{
+              this.$refs.upload.submit()
+            })
+            // if (this.ruleForm.code != 556596){
+            //   this.$message({
+            //     message: '验证码不正确！',
+            //     type: 'error'
+            //   });
+            // }else {
+            //
+            // }
           } else {
             console.log('error submit!!');
             return false;
@@ -187,7 +209,7 @@ export default {
         },
         // 检查账号是否符合规范
         checkAccount(){
-            let checkAccount=/^\d{10}$/;
+            let checkAccount=/^\d{11}$/;
             let accountTest=checkAccount.test(event.target.value);
             if(!accountTest&&this.loginMethods=='用户'){
                 this.$refs.submit.disabled=true;
@@ -263,6 +285,29 @@ h2{
     margin-top: 5vh;
     text-align: center;
     color: yellowgreen;
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409EFF;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 120px;
+  height: 120px;
+  line-height: 120px;
+  text-align: center;
+}
+.avatar {
+  width: 120px;
+  height: 120px;
+  display: block;
 }
 .login{
     width: 100vw;

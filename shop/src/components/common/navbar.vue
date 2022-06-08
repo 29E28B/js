@@ -7,7 +7,8 @@
             
         </div>
         <div class="user" v-if="username !== -1">欢迎你&nbsp;&nbsp;{{username}},
-            <span class="exit" @click="loginExit">退出登录</span>
+          <el-avatar shape="square" :size="100" :fit="fit" :src="logoimgurl" style="width: 50px;height: 50px;margin-top: 10px;"></el-avatar>
+          <span class="exit" @click="loginExit">退出登录</span>
         </div>
         <span class="exit" @click="login" v-else>登入</span>
     </header>
@@ -20,6 +21,8 @@ export default {
     name:'navbar',
     data(){
         return {
+          fit: 'cover',
+          logoimgurl:this.$store.state.userinfo.path,
           user:'',
           username:this.$store.state.userinfo ? this.$store.state.userinfo.username : -1
         }
@@ -69,5 +72,8 @@ export default {
 }
 .logoimg{
     height: 70%;
+}
+.el-avatar >>> img{
+  width: 100%;
 }
 </style>

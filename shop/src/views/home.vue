@@ -39,6 +39,7 @@ export default {
               if (res.data.data === undefined || res.data.data){
                 this.isshow = true
               }
+              res.data.data.path = 'http://127.0.0.1:8000/shop/picimg1/' + res.data.data.path.split("shoppic/imgs/").join("")
                 this.$store.commit('getuserName',res.data.data);
             })
             .catch(err=>console.log(err.response));

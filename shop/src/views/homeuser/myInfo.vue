@@ -2,6 +2,22 @@
 <div class="myinfo">
     <main-top-bar classify="个人信息"></main-top-bar>
     <el-form :model="useform" :rules="rules" ref="useform" label-width="100px" class="demo-ruleForm" style="padding-top: 20px">
+      <el-form-item label="头像：">
+        <el-upload
+            ref="upload"
+            class="avatar-uploader"
+            action="/car/admin/updateUser"
+            :on-success="handleAvatarSuccess"
+            accept="image/*"
+            :show-file-list="false"
+            :auto-upload="false"
+            :data="param11"
+            :on-change="change"
+            list-type="picture">
+          <img v-if="imageUrl" :src="imageUrl" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+      </el-form-item>
       <el-form-item label="姓名" prop="username">
         <el-input v-model="useform.username"></el-input>
       </el-form-item>
@@ -28,9 +44,12 @@ import mainTopBar from '../../components/common/mainTopBar.vue';
 import {Message} from "element-ui";
 export default {
    name:'myinfo',
-    data() {
+  inject:["reload"],
+  data() {
        return{
          useform:this.$store.state.userinfo,
+         param11:{},
+         imageUrl:'',
          rules: {
            username: [
              { required: true, message: '请输入姓名名称', trigger: 'blur' },
@@ -40,29 +59,54 @@ export default {
              { required: true, message: '请选择性别', trigger: 'change' }
            ],
            account: [
-             {required: true,type: 'number',message: '请输入账号',trigger: 'change'},
-             {pattern:/^\d{10}$/ ,message: '账号为10位数字', trigger: 'change' }
+             {required: true,message: '请输入账号',trigger: 'blur'},
+             {pattern:/^\d{11}$/ ,message: '账号为11位数字', trigger: 'blur' }
            ],
          }
        }
     },
     methods: {
+      change(file){
+        this.imageUrl = file.url
+      },
+      handleAvatarSuccess(res){
+        if(res.msg =='修改成功'){
+          Message.success(res.msg);
+          this.reload()
+        }else{
+          Message.error(res.msg);
+        }
+      },
+      // getUserInformation(){
+      //   this.$axios.get('/user/userinfo')
+      //       .then(res=>{
+      //         console.log(res.data.data)
+      //         if (res.data.data === undefined || res.data.data){
+      //           this.isshow = true
+      //         }
+      //         this.$store.commit('getuserName',res.data.data);
+      //       })
+      //       .catch(err=>console.log(err.response));
+      // },
       resetForm(formName) {
         this.$refs[formName].resetFields();
       },
       submitForm(formName) {
-        console.log(this.useform)
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$axios.post('/admin/updateUser',{data:Object.assign(this.useform,{userid:this.useform.id})})
-                .then(res=>{
-                  console.log(res)
-                  if(res.status==200){
-                    Message.success(res.data.msg);
-                  }else{
-                    Message.error(res.data.msg);
-                  }
-                })
+            this.param11 = Object.assign({},this.useform,{userid:this.useform.id})
+            this.$nextTick(()=>{
+              this.$refs.upload.submit()
+            })
+            // this.$axios.post('/admin/updateUser',{data:Object.assign(this.useform,{userid:this.useform.id})})
+            //     .then(res=>{
+            //       console.log(res)
+            //       if(res.status==200){
+            //         Message.success(res.data.msg);
+            //       }else{
+            //         Message.error(res.data.msg);
+            //       }
+            //     })
           } else {
             console.log('error submit!!');
             return false;
@@ -95,5 +139,27 @@ export default {
   width: 100%;
   height: calc(100% - 60px);
 }
-
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409EFF;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 120px;
+  height: 120px;
+  line-height: 120px;
+  text-align: center;
+}
+.avatar {
+  width: 120px;
+  height: 120px;
+  display: block;
+}
 </style>

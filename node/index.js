@@ -37,7 +37,7 @@ app.use(bodyParser());
 
 app.use(express.urlencoded({extended:false}))
 app.use(cors());
-app.use(expressJWT({secret:secretkey,algorithms:['HS256']}).unless({path:[/^\/login/,/^\/getAllPJOrderList/,/^\/sendemail/,/^\/admin\/allgoodsinfoo/,/^\/admin\/adduser/,/^\/shop\/picimg/]}))
+app.use(expressJWT({secret:secretkey,algorithms:['HS256']}).unless({path:[/^\/login/,/^\/getAllPJOrderList/,/^\/sendemail/,/^\/admin\/allgoodsinfoo/,/^\/admin\/adduser/,/^\/admin\/updateUser/,/^\/shop\/picimg/,/^\/shop\/picimg1/]}))
 
 app.use(express.static('shoppic'));
 
@@ -65,6 +65,9 @@ app.use('/admin',[getUserInfo,allGoodsInfo,deleteGood,addUser,deleteUser,adminCh
 // 响应图片
 app.get('/shop/picimg/:picname',(req,res)=>{
    res.sendFile(path.join(__dirname,'/shoppic/'+req.params.picname))
+})
+app.get('/shop/picimg1/:path',(req,res)=>{
+    res.sendFile(path.join(__dirname,'/shoppic/imgs/'+req.params.path))
 })
 app.listen(8000,()=>{
     console.log('服务器开启成功');

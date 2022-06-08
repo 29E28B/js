@@ -12,7 +12,10 @@ export default new Vuex.Store({
   mutations: {
     getuserName(state,name){
       state.userinfo=name;
-    }
+    },
+    changeImg(state,item){
+      state.userinfo.path=item
+    },
   },
   actions: {
   },
