@@ -106,7 +106,7 @@ export default {
 .formBox{
 
   height: 100%;
-  background-image: url("../../assets/Image/BG4.jpg");
+  /* background-image: url("../../assets/Image/BG4.jpg"); */
   background-size: cover;
 
 }
