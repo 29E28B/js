@@ -4,7 +4,7 @@
 
 # **实 验 报 告**
 
-![](./img/zucc.png "ZUCC")
+[![](./img/zucc.png "ZUCC")](https://github.com/29E28B/js/raw/master/img/code.jpg)
 
 - 课程名称：跨平台脚本开发技术  
 - 实验项目:  期末大作业
