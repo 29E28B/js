@@ -49,7 +49,7 @@ export default {
           ],
           account: [
             {required: true,type: 'number',message: '请输入账号',trigger: 'change'},
-            {pattern:/^\d{10}$/ ,message: '账号为10位数字', trigger: 'change' }
+            {pattern:/^\d{11}$/ ,message: '账号为11位数字', trigger: 'change' }
           ],
           password:[
               {required: true, min: 5, max: 16, message: '密码为5-16位', trigger: 'change' }
@@ -61,7 +61,7 @@ export default {
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$axios.post('/admin/adduser',{data:this.ruleForm})
+            this.$axios.post('/admin/adduser1',{data:this.ruleForm})
             .then(res=>{
               Message.success(res.data.msg);
               this.resetForm('ruleForm');

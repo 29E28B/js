@@ -35,7 +35,7 @@ VueRouter.prototype.replace = function replace(to) {
 const routes = [
   {
     path:'/',
-    redirect:'/home/shopList'
+    redirect:'/login'
   },
   {
     path: '/home',

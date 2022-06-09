@@ -214,7 +214,7 @@ export default {
     justify-content:flex-start;
     padding: 0 10px;
     height: 100px;
-    background-image: linear-gradient(to right, #fddb92 0%, #d1fdff 100%);
+    /* background-image: linear-gradient(to right, #fddb92 0%, #d1fdff 100%); */
     border-bottom: 2px solid #ccc;
     overflow: hidden;
 }
@@ -225,6 +225,7 @@ export default {
 .goodPic{
     display: flex;
     align-items: center;
+
     height: 100%;
     line-height: 100px;
     margin: 0 20px;

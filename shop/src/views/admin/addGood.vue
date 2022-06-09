@@ -123,7 +123,7 @@ export default {
  .addGood{
      width: 100%;
      height: 100%;
-     background-image: url("~assets/Image/BG1.jpg");
+     /* background-image: url("~assets/Image/BG1.jpg"); */
      background-size: cover;
 
  }

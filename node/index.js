@@ -27,7 +27,6 @@ const adminChangePassword = require('./routes/adminChangePassword');
 const checkToken = require('./routes/checkToken');
 const addGoods = require('./routes/addGoods');
 const Order = require('./routes/Order');
-const SendMail = require('./routes/SendMail');
 // 自定义变量
 
 // token秘钥
@@ -37,7 +36,7 @@ app.use(bodyParser());
 
 app.use(express.urlencoded({extended:false}))
 app.use(cors());
-app.use(expressJWT({secret:secretkey,algorithms:['HS256']}).unless({path:[/^\/login/,/^\/getAllPJOrderList/,/^\/sendemail/,/^\/admin\/allgoodsinfoo/,/^\/admin\/adduser/,/^\/admin\/updateUser/,/^\/shop\/picimg/,/^\/shop\/picimg1/]}))
+app.use(expressJWT({secret:secretkey,algorithms:['HS256']}).unless({path:[/^\/login/,/^\/getAllPJOrderList/,/^\/admin\/allgoodsinfoo/,/^\/admin\/adduser/,/^\/admin\/adduser1/,/^\/admin\/updateUser/,/^\/shop\/picimg/,/^\/shop\/picimg1/]}))
 
 app.use(express.static('shoppic'));
 
@@ -59,7 +58,7 @@ app.use((err,req,res,next)=>{
 app.use('/login',login);
 app.use(checkToken);
 app.use('/user',userinfo);
-app.use(goodSearch,Order,SendMail);
+app.use(goodSearch,Order);
 app.use('/user',[userChangePassword,GetAllCarInfo]);
 app.use('/admin',[getUserInfo,allGoodsInfo,deleteGood,addUser,deleteUser,adminChangePassword,addGoods,updateUser,updateGoods]);
 // 响应图片
