@@ -196,4 +196,4 @@
 1. ## git提交记录
 
    * https://github.com/29E28B/js
-   * https://raw.githubusercontent.com/29E28B/js/master/img/code.jpg
+   * [![](./img/zucc.png "ZUCC")](https://raw.githubusercontent.com/29E28B/js/master/img/code.jpg)
